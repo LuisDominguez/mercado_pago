@@ -1,13 +1,13 @@
 require 'test_helper'
 
-class PagosControllerTest < ActionDispatch::IntegrationTest
+class PaymentsControllerTest < ActionDispatch::IntegrationTest
   test "should get new" do
-    get pagos_new_url
+    get payments_new_url
     assert_response :success
   end
 
   test "should get index" do
-    get pagos_index_url
+    get payments_index_url
     assert_response :success
   end
 

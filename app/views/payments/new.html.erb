@@ -1,0 +1,64 @@
+<%= form_with(model: @payment, local: true) do |form| %>
+
+
+  <div class="field">
+    <%= form.label :'Nombre de la persona' %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div id="items">
+
+  </div>
+
+  <div class="field">
+    <%= form.label :items %>
+    <%= form.text_field :items %>
+  </div>
+
+  <div class="field">
+    <%= form.label :card_number %>
+    <%= form.text_area :card_number, id: :card_number %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+
+  <div id="template_for_items" style="display:none">
+    <div class="item">
+      <img src="%IMAGE%" width="80"/>
+      <div class="title">%NAME%</div> - <div class="price">$ %PRICE%</div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var items = JSON.parse(localStorage.getItem('items_to_payment'));
+    
+    $.ajax({
+      url: "<%= get_items_path %>",
+      data: "items=" + items,
+      dataType: "json",
+      success: function (data) {
+        console.log(data.items)
+        $.each(data.items,function(i,item){
+          html = $("#template_for_items").html();
+
+          regex = new RegExp("%NAME%", 'g');
+          html = html.replace(regex, String(item.name));
+
+          regex = new RegExp("%PRICE%", 'g');
+          html = html.replace(regex, String(item.price));
+
+          regex = new RegExp("%IMAGE%", 'g');
+          html = html.replace(regex, String(item.image_link));
+
+          $("#items").append(html)
+        });
+        console.log(data)
+      },
+      failure: function () {
+        alert("error al cargar los items a pagar")
+      }
+    });
+  </script>
+<% end %>
